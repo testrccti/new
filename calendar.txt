@@ -1,0 +1,25 @@
+
+    public
+    @Named("Regression")
+    @Test(description = "GL-69911:Post an event < 14 days from today's date in a one-on-one conversation and verify event posted on calendar and conversation stream of both users and is added to right pane")
+    @Manual(ids = "GL-69911", accounts = "Glipods_5ext_withdl")
+    void postAnEventDaysFromTodaySDateInAOneOnOneConversationAndVerifyEventPostedOnCalendarAndConversationStreamOfBothUsersAndIsAddedToRightPane_GL69911() {
+        glip.open("User_1", "Account1", "101", INITIALIZING);
+        glip.open("User_2", "Account1", "102", INITIALIZING);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("M/dd/yy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 13);
+        String Date = sdf.format(calendar.getTime());
+
+        Log.step("1. Post an event with start date earlier 14 days from today's date in one-on-one conversation.");
+        glip.swith("User_1");
+        glip.paneLeftRail.openConversation("User 102");
+        glip.conversationFlow.createEventWithStartDate("Event for next week", Date);
+        Log.verify("Event posted on conversation stream of User_1",
+                glip.pageConversation.getConversationItem(0).getEventName(), "Event for next week", CONTAINS);
+        Log.verify("Event is added to right pane of User_1",
+                glip.paneRightRail.getEventsList().getEventItem(0).getTitle().getText(), "Event for next week");
+
+        glip.paneLeftRail.clickCalendar();
+    }
