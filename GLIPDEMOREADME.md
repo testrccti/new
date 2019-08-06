@@ -8,3 +8,5 @@ THIS one for GLIPDEMO
 NORMALNO!!!!!!!!!!!
 ырщещ
 jh
+
+NARMALNO!
